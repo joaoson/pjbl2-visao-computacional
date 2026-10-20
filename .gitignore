@@ -1,0 +1,7 @@
+.venv/
+__pycache__/
+.DS_Store
+
+# gerados ao rodar o projeto
+dados/
+resultados/modelo_treinado.pt

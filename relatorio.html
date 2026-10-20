@@ -1,0 +1,1165 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Bife, pizza ou sushi? — PjBL2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Gloock&family=JetBrains+Mono:wght@400;500&family=Schibsted+Grotesk:ital,wght@0,400;0,500;0,600;0,700;1,400&display=swap" rel="stylesheet">
+<style>
+  /* ------------------------------------------------------------------
+     Paleta e tipografia
+     ------------------------------------------------------------------ */
+  :root {
+    color-scheme: light;
+
+    --papel: #FBF8F2;          /* fundo */
+    --papel-escuro: #F3EDE2;   /* blocos destacados */
+    --tinta: #1F1B16;          /* texto principal */
+    --tinta-2: #5C544A;        /* texto secundário */
+    --tinta-3: #8A8176;        /* texto discreto */
+    --linha: #E4DCCD;          /* linhas finas */
+
+    /* cores das classes */
+    --bife: #9A3412;
+    --pizza: #D08A00;
+    --sushi: #00897B;
+
+    /* cores dos conjuntos */
+    --treino: #3B6FC4;
+    --validacao: #C2417A;
+    --teste: #6A8F2A;
+
+    --serif: "Gloock", "Iowan Old Style", Georgia, serif;
+    --sans: "Schibsted Grotesk", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+
+    --largura-texto: 44rem;
+    --largura-total: 68rem;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    margin: 0;
+    padding: 0 1.25rem;
+    background: var(--papel);
+    color: var(--tinta);
+    font: 400 1.0625rem/1.65 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+
+  img { max-width: 100%; display: block; }
+
+  a { color: inherit; text-decoration-color: var(--tinta-3); text-underline-offset: 3px; }
+  a:hover { text-decoration-color: var(--tinta); }
+
+  .numero { font-variant-numeric: proportional-nums; }
+
+  /* ------------------------------------------------------------------
+     Estrutura geral
+     ------------------------------------------------------------------ */
+  .pagina { max-width: var(--largura-total); margin: 0 auto; }
+
+  .texto { max-width: var(--largura-texto); }
+
+  section { padding-block: 4.5rem 1rem; border-top: 1px solid var(--linha); }
+
+  h1, h2, h3 { font-family: var(--serif); font-weight: 400; letter-spacing: -0.01em; margin: 0; }
+  h2 { font-size: clamp(2rem, 4.5vw, 2.75rem); line-height: 1.1; margin-bottom: 1.25rem; }
+  h3 { font-size: 1.45rem; line-height: 1.2; margin: 2.75rem 0 0.75rem; }
+
+  p { margin: 0 0 1rem; }
+
+  .rotulo {
+    font: 600 0.75rem/1 var(--sans);
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--tinta-3);
+    margin-bottom: 1rem;
+    display: flex;
+    gap: 0.75rem;
+    align-items: center;
+  }
+  .rotulo .etapa-num { color: var(--tinta); }
+
+  .destaque-texto { font-size: 1.2rem; line-height: 1.55; color: var(--tinta-2); }
+
+  /* ------------------------------------------------------------------
+     Capa
+     ------------------------------------------------------------------ */
+  .capa { padding-block: 3.5rem 3rem; }
+
+  .capa .instituicao {
+    font: 500 0.8125rem/1.4 var(--sans);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--tinta-2);
+    padding-bottom: 1rem;
+    border-bottom: 3px double var(--tinta);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1.5rem;
+  }
+
+  .capa h1 {
+    font-size: clamp(3.25rem, 11vw, 7.5rem);
+    line-height: 0.95;
+    margin: 2.5rem 0 1.5rem;
+  }
+  .capa h1 .sublinhado {
+    text-decoration: underline;
+    text-decoration-color: var(--cor);
+    text-decoration-thickness: 0.09em;
+    text-underline-offset: 0.12em;
+    text-decoration-skip-ink: none;
+  }
+
+  .capa .subtitulo { font-size: clamp(1.15rem, 2.4vw, 1.4rem); line-height: 1.5; color: var(--tinta-2); max-width: 36rem; }
+
+  .creditos {
+    margin-top: 2rem;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(14rem, 1fr));
+    gap: 1rem 2rem;
+    font-size: 0.95rem;
+  }
+  .creditos dt { font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tinta-3); }
+  .creditos dd { margin: 0.2rem 0 0; }
+
+  /* Números principais */
+  .numeros {
+    margin-top: 3rem;
+    display: grid;
+    grid-template-columns: 1.6fr repeat(3, 1fr);
+    border-top: 1px solid var(--tinta);
+    border-bottom: 1px solid var(--tinta);
+  }
+  .numeros > div { padding: 1.25rem 1.25rem 1.25rem 0; }
+  .numeros > div + div { padding-left: 1.25rem; border-left: 1px solid var(--linha); }
+  .numeros .valor { font: 600 2.25rem/1.05 var(--sans); letter-spacing: -0.02em; }
+  .numeros .principal .valor { font-size: clamp(3.5rem, 8vw, 4.75rem); }
+  .numeros .legenda { font-size: 0.875rem; color: var(--tinta-2); margin-top: 0.35rem; }
+
+  /* Sumário */
+  .sumario {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem 1.75rem;
+    padding-block: 1.25rem 2.5rem;
+    font-size: 0.95rem;
+  }
+  .sumario a { text-decoration: none; color: var(--tinta-2); }
+  .sumario a:hover { color: var(--tinta); }
+  .sumario span { font-variant-numeric: tabular-nums; color: var(--tinta-3); margin-right: 0.35rem; }
+
+  /* ------------------------------------------------------------------
+     Checklist de requisitos
+     ------------------------------------------------------------------ */
+  .requisitos { list-style: none; margin: 1.5rem 0 0; padding: 0; counter-reset: req; }
+  .requisitos li {
+    display: grid;
+    grid-template-columns: 2.25rem 1fr;
+    gap: 0 1rem;
+    padding: 1.1rem 0;
+    border-bottom: 1px solid var(--linha);
+  }
+  .requisitos .marca {
+    width: 1.75rem; height: 1.75rem; border-radius: 50%;
+    display: grid; place-items: center;
+    font: 700 0.9rem/1 var(--sans);
+    background: var(--tinta); color: var(--papel);
+    margin-top: 0.1rem;
+  }
+  .requisitos .marca.pendente { background: transparent; color: var(--tinta-2); border: 1.5px dashed var(--tinta-3); }
+  .requisitos strong { display: block; font-weight: 600; }
+  .requisitos .como { color: var(--tinta-2); font-size: 0.975rem; }
+  .requisitos code { font: 0.85em var(--mono); background: var(--papel-escuro); padding: 0.1em 0.35em; border-radius: 3px; }
+
+  /* ------------------------------------------------------------------
+     Etapa 1 — lista estilo cardápio
+     ------------------------------------------------------------------ */
+  .cardapio { list-style: none; padding: 0; margin: 1.5rem 0 2rem; max-width: 26rem; }
+  .cardapio li { display: flex; align-items: baseline; gap: 0.6rem; padding: 0.35rem 0; font-size: 1.15rem; }
+  .cardapio .pontilhado { flex: 1; border-bottom: 2px dotted var(--tinta-3); transform: translateY(-0.3em); }
+  .cardapio .qtd { font-weight: 600; font-variant-numeric: tabular-nums; }
+  .cardapio .total { border-top: 1px solid var(--tinta); margin-top: 0.4rem; padding-top: 0.6rem; font-weight: 600; }
+
+  .bolinha { width: 0.7rem; height: 0.7rem; border-radius: 50%; display: inline-block; flex: none; }
+  .b-bife { background: var(--bife); }
+  .b-pizza { background: var(--pizza); }
+  .b-sushi { background: var(--sushi); }
+
+  figure { margin: 2rem 0; }
+  figure.moldura img { border: 1px solid var(--linha); border-radius: 4px; background: #fff; }
+  figcaption { font-size: 0.875rem; color: var(--tinta-3); margin-top: 0.75rem; max-width: var(--largura-texto); }
+
+  /* ------------------------------------------------------------------
+     Etapa 2 — barra de divisão
+     ------------------------------------------------------------------ */
+  .barra-divisao { display: flex; gap: 2px; height: 2.75rem; margin: 2rem 0 1rem; }
+  .barra-divisao div { border-radius: 4px; }
+
+  .legenda-divisao {
+    display: grid;
+    grid-template-columns: 70fr 15fr 15fr;
+    gap: 2px;
+    font-size: 0.9rem;
+  }
+  .legenda-divisao div { min-width: 0; }
+  .legenda-divisao .nome { font-weight: 600; display: flex; align-items: center; gap: 0.4rem; }
+  .legenda-divisao .detalhe { color: var(--tinta-2); font-variant-numeric: tabular-nums; }
+
+  .tres-cartoes {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+    margin: 2.5rem 0;
+  }
+  .cartao { background: var(--papel-escuro); border-radius: 6px; padding: 1.25rem 1.25rem 1rem; }
+  .cartao h4 { margin: 0 0 0.5rem; font: 600 1rem/1.3 var(--sans); display: flex; align-items: center; gap: 0.5rem; }
+  .cartao p { font-size: 0.95rem; color: var(--tinta-2); margin: 0; }
+  .cartao .chave { width: 1.1rem; height: 0.55rem; border-radius: 2px; display: inline-block; }
+
+  /* Tabelas */
+  .tabela-rolavel { overflow-x: auto; margin: 1.5rem 0; }
+  table { border-collapse: collapse; width: 100%; font-size: 0.975rem; font-variant-numeric: tabular-nums; }
+  th, td { padding: 0.6rem 0.9rem; text-align: right; border-bottom: 1px solid var(--linha); white-space: nowrap; }
+  th:first-child, td:first-child { text-align: left; padding-left: 0; }
+  thead th { font-size: 0.75rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--tinta-3); font-weight: 600; border-bottom: 1px solid var(--tinta); }
+  tfoot td { font-weight: 600; border-top: 1px solid var(--tinta); border-bottom: none; }
+  td .classe { display: inline-flex; align-items: center; gap: 0.5rem; }
+
+  /* tabela de duas colunas "item: descrição" */
+  table.chave-valor { font-variant-numeric: normal; }
+  table.chave-valor td { text-align: left; white-space: normal; vertical-align: top; }
+  table.chave-valor td:first-child { color: var(--tinta-2); width: 40%; padding-right: 1.5rem; }
+
+  /* ------------------------------------------------------------------
+     Etapa 3 — diagrama do modelo
+     ------------------------------------------------------------------ */
+  .diagrama {
+    display: grid;
+    grid-template-columns: 1fr auto 2.2fr auto 1.3fr auto 1fr;
+    align-items: stretch;
+    gap: 0.75rem;
+    margin: 2.5rem 0;
+  }
+  .bloco { border: 1px solid var(--tinta); border-radius: 6px; padding: 1rem; display: flex; flex-direction: column; gap: 0.35rem; }
+  .bloco .tipo { font-size: 0.7rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tinta-3); font-weight: 600; }
+  .bloco .nome { font-weight: 600; line-height: 1.3; }
+  .bloco .info { font-size: 0.875rem; color: var(--tinta-2); line-height: 1.45; }
+  .bloco.congelado {
+    background:
+      repeating-linear-gradient(135deg, transparent 0 10px, rgba(59, 111, 196, 0.06) 10px 11px),
+      #EEF2F8;
+    border-color: #9DB2D6;
+  }
+  .bloco.treinavel { background: var(--tinta); color: var(--papel); border-color: var(--tinta); }
+  .bloco.treinavel .tipo, .bloco.treinavel .info { color: #CFC6B8; }
+  .bloco .camadas { display: flex; gap: 3px; margin: 0.4rem 0; }
+  .bloco .camadas i { flex: 1; height: 1.6rem; border-radius: 2px; background: #9DB2D6; opacity: calc(0.45 + var(--i) * 0.07); }
+  .saidas { display: flex; flex-direction: column; gap: 0.4rem; justify-content: center; }
+  .saidas > span { display: flex; align-items: center; gap: 0.5rem; border: 1px solid var(--linha); border-radius: 999px; padding: 0.3rem 0.8rem; font-weight: 500; background: #fff; }
+  .seta { align-self: center; color: var(--tinta-3); font-size: 1.25rem; }
+
+  .proporcao { font-size: 0.95rem; color: var(--tinta-2); border-left: 3px solid var(--tinta); padding-left: 1rem; margin: 0 0 2rem; }
+
+  /* Gráficos de linha */
+  .legenda-grafico { display: flex; flex-wrap: wrap; gap: 0.5rem 1.5rem; font-size: 0.9rem; color: var(--tinta-2); margin: 2rem 0 0.5rem; }
+  .legenda-grafico span { display: inline-flex; align-items: center; gap: 0.5rem; }
+  .legenda-grafico i { width: 1.25rem; height: 2px; display: inline-block; border-radius: 1px; }
+  .legenda-grafico .marcador { width: 0.6rem; height: 0.6rem; border-radius: 50%; background: var(--tinta); box-shadow: 0 0 0 2px var(--papel); }
+
+  .graficos { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; }
+  .grafico { position: relative; }
+  .grafico h4 { margin: 0 0 0.25rem; font: 600 0.95rem/1.3 var(--sans); }
+  .grafico .sub { font-size: 0.85rem; color: var(--tinta-3); margin-bottom: 0.5rem; }
+  .grafico svg { width: 100%; height: auto; display: block; overflow: visible; touch-action: pan-y; }
+  .grafico svg:focus { outline: none; }
+  .grafico svg:focus-visible { outline: 2px solid var(--tinta); outline-offset: 4px; border-radius: 4px; }
+  .grafico text { font-family: var(--sans); font-size: 11px; fill: var(--tinta-3); }
+  .grafico .anotacao { fill: var(--tinta); font-weight: 600; }
+
+  .dica {
+    position: absolute;
+    pointer-events: none;
+    background: #fff;
+    border: 1px solid var(--linha);
+    border-radius: 6px;
+    box-shadow: 0 6px 20px rgba(31, 27, 22, 0.12);
+    padding: 0.55rem 0.75rem;
+    font-size: 0.85rem;
+    line-height: 1.4;
+    min-width: 9rem;
+    z-index: 5;
+    opacity: 0;
+    transition: opacity 0.12s;
+  }
+  .dica.visivel { opacity: 1; }
+  .dica .titulo-dica { color: var(--tinta-3); font-size: 0.75rem; margin-bottom: 0.25rem; }
+  .dica .linha-dica { display: flex; align-items: center; gap: 0.5rem; }
+  .dica .linha-dica i { width: 0.9rem; height: 2px; display: inline-block; }
+  .dica .linha-dica b { font-weight: 600; color: var(--tinta); font-variant-numeric: tabular-nums; }
+  .dica .linha-dica span { color: var(--tinta-2); }
+
+  details { margin: 1.5rem 0; }
+  summary { cursor: pointer; color: var(--tinta-2); font-size: 0.95rem; }
+  summary:hover { color: var(--tinta); }
+
+  /* ------------------------------------------------------------------
+     Etapa 4 — matriz de confusão
+     ------------------------------------------------------------------ */
+  .resultado-grid { display: grid; grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr); gap: 3rem; align-items: start; margin-top: 2rem; }
+
+  .matriz-wrap { position: relative; }
+  .matriz {
+    display: grid;
+    grid-template-columns: auto auto repeat(3, minmax(4.5rem, 1fr));
+    gap: 4px;
+    align-items: stretch;
+  }
+  .matriz .eixo-x { grid-column: 3 / -1; text-align: center; font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tinta-3); font-weight: 600; padding-bottom: 0.25rem; }
+  .matriz .eixo-y {
+    grid-row: 3 / span 3;
+    writing-mode: vertical-rl;
+    transform: rotate(180deg);
+    text-align: center;
+    font-size: 0.75rem; letter-spacing: 0.12em; text-transform: uppercase; color: var(--tinta-3); font-weight: 600;
+  }
+  .matriz .cab { font-weight: 600; font-size: 0.95rem; display: flex; align-items: center; gap: 0.45rem; }
+  .matriz .cab.col { justify-content: center; padding-bottom: 0.35rem; }
+  .matriz .cab.lin { padding-right: 0.5rem; }
+  .celula {
+    aspect-ratio: 1;
+    border-radius: 4px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    background: color-mix(in oklab, #2B2620 calc(var(--t) * 100%), #F3EDE2);
+    color: var(--tinta);
+    cursor: default;
+    transition: transform 0.12s, box-shadow 0.12s;
+    font-variant-numeric: tabular-nums;
+  }
+  .celula.escura { color: #FBF8F2; }
+  .celula .n { font: 600 1.75rem/1 var(--sans); }
+  .celula .pct { font-size: 0.8rem; opacity: 0.75; margin-top: 0.3rem; }
+  .celula:hover, .celula:focus-visible { transform: scale(1.04); box-shadow: 0 0 0 2px var(--papel), 0 0 0 4px var(--tinta); outline: none; }
+  .como-ler { font-size: 0.875rem; color: var(--tinta-3); margin-top: 1rem; }
+
+  .formulas { display: grid; grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr)); gap: 1rem; margin: 2rem 0; }
+  .formula { border-top: 2px solid var(--tinta); padding-top: 0.75rem; }
+  .formula h4 { margin: 0; font: 600 1rem/1.3 var(--sans); }
+  .formula code { display: block; font: 500 0.9rem/1.5 var(--mono); margin: 0.4rem 0; color: var(--tinta); }
+  .formula p { font-size: 0.925rem; color: var(--tinta-2); margin: 0; }
+
+  .siglas { font-size: 0.9rem; color: var(--tinta-2); }
+
+  /* ------------------------------------------------------------------
+     Conclusão e reprodução
+     ------------------------------------------------------------------ */
+  .conclusoes { list-style: none; padding: 0; margin: 1.5rem 0; }
+  .conclusoes li { padding: 1rem 0 1rem 2.25rem; border-bottom: 1px solid var(--linha); position: relative; }
+  .conclusoes li::before {
+    content: counter(list-item, decimal-leading-zero);
+    position: absolute; left: 0; top: 1.05rem;
+    font: 600 0.8rem/1.6 var(--sans); color: var(--tinta-3);
+  }
+
+  pre {
+    background: var(--tinta);
+    color: #EDE6DA;
+    padding: 1.25rem 1.5rem;
+    border-radius: 6px;
+    overflow-x: auto;
+    font: 0.9rem/1.7 var(--mono);
+    margin: 1.5rem 0;
+  }
+  pre .comentario { color: #9C9284; }
+
+  .arvore { background: var(--papel-escuro); color: var(--tinta); }
+  .arvore .comentario { color: var(--tinta-3); }
+
+  footer {
+    border-top: 3px double var(--tinta);
+    margin-top: 4rem;
+    padding-block: 1.5rem 3rem;
+    font-size: 0.875rem;
+    color: var(--tinta-3);
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 2rem;
+  }
+
+  /* ------------------------------------------------------------------
+     Animação de entrada (desligada para quem prefere menos movimento)
+     ------------------------------------------------------------------ */
+  @media (prefers-reduced-motion: no-preference) {
+    .capa > * { animation: subir 0.7s cubic-bezier(0.2, 0.7, 0.2, 1) both; }
+    .capa > *:nth-child(2) { animation-delay: 0.08s; }
+    .capa > *:nth-child(3) { animation-delay: 0.16s; }
+    .capa > *:nth-child(4) { animation-delay: 0.24s; }
+    .capa > *:nth-child(5) { animation-delay: 0.32s; }
+    @keyframes subir { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: none; } }
+  }
+
+  /* ------------------------------------------------------------------
+     Telas pequenas
+     ------------------------------------------------------------------ */
+  @media (max-width: 860px) {
+    .numeros { grid-template-columns: 1fr 1fr; }
+    .numeros .principal { grid-column: 1 / -1; border-bottom: 1px solid var(--linha); }
+    .numeros > div:nth-child(2) { border-left: none; padding-left: 0; }
+    .numeros > div:nth-child(4) { grid-column: 1 / -1; border-left: none; padding-left: 0; border-top: 1px solid var(--linha); }
+    .diagrama { grid-template-columns: 1fr; }
+    .seta { transform: rotate(90deg); justify-self: center; }
+    .saidas { flex-direction: row; flex-wrap: wrap; }
+    .graficos, .resultado-grid { grid-template-columns: minmax(0, 1fr); }
+    .tres-cartoes { grid-template-columns: 1fr; }
+  }
+
+  @media (max-width: 560px) {
+    .legenda-divisao { grid-template-columns: 1fr; gap: 0.5rem; }
+    .legenda-divisao .nome, .legenda-divisao .detalhe { display: inline-flex; }
+    .legenda-divisao .detalhe { margin-left: 0.4rem; }
+    .matriz { grid-template-columns: auto auto repeat(3, minmax(0, 1fr)); }
+    .celula .n { font-size: 1.35rem; }
+    .matriz .cab.lin .bolinha, .matriz .cab.col .bolinha { display: none; }
+  }
+
+  @media print {
+    body { background: #fff; }
+    section { break-inside: avoid-page; }
+    figure, .diagrama, .matriz-wrap, .grafico { break-inside: avoid; }
+    .sumario { display: none; }
+  }
+</style>
+</head>
+<body>
+<main class="pagina">
+
+  <!-- ================================================================
+       CAPA
+       ================================================================ -->
+  <header class="capa">
+    <div class="instituicao">
+      <span>PUCPR · Sistemas de Informação Inteligentes</span>
+      <span>Atividade PjBL2</span>
+    </div>
+
+    <h1><span class="sublinhado" style="--cor: var(--bife)">Bife</span>, <span class="sublinhado" style="--cor: var(--pizza)">pizza</span><br>ou <span class="sublinhado" style="--cor: var(--sushi)">sushi</span>?</h1>
+
+    <p class="subtitulo">
+      Um modelo de visão computacional que olha a foto de um prato
+      e diz qual dos três ela mostra.
+    </p>
+
+    <dl class="creditos">
+      <div><dt>Professor</dt><dd>Prof. Dr. Joelton Deonei Gotz</dd></div>
+      <div><dt>Integrantes</dt><dd>Carlos Hobmeier, Amanda Queiroz e João Vitor de Freitas</dd></div>
+      <div><dt>Modelo</dt><dd>ResNet-18 com transfer learning (PyTorch)</dd></div>
+    </dl>
+
+    <div class="numeros" aria-label="Resumo dos resultados">
+      <div class="principal">
+        <div class="valor numero">93,3%</div>
+        <div class="legenda">de acurácia em 90 fotos de teste que o modelo nunca tinha visto</div>
+      </div>
+      <div>
+        <div class="valor numero">600</div>
+        <div class="legenda">imagens na base</div>
+      </div>
+      <div>
+        <div class="valor numero">3</div>
+        <div class="legenda">categorias</div>
+      </div>
+      <div>
+        <div class="valor numero">0,933</div>
+        <div class="legenda">F1-score médio</div>
+      </div>
+    </div>
+  </header>
+
+  <nav class="sumario" aria-label="Sumário">
+    <a href="#requisitos"><span>00</span>Requisitos</a>
+    <a href="#base"><span>01</span>Base de imagens</a>
+    <a href="#protocolo"><span>02</span>Protocolo experimental</a>
+    <a href="#modelo"><span>03</span>Modelo</a>
+    <a href="#resultados"><span>04</span>Resultados</a>
+    <a href="#conclusao"><span>05</span>Conclusão</a>
+    <a href="#reproduzir"><span>06</span>Como reproduzir</a>
+  </nav>
+
+  <!-- ================================================================
+       REQUISITOS
+       ================================================================ -->
+  <section id="requisitos">
+    <div class="rotulo"><span class="etapa-num">00</span> Enunciado</div>
+    <h2>O que foi pedido e onde está</h2>
+    <div class="texto">
+      <p class="destaque-texto">
+        O PjBL2 pede um modelo de visão computacional que classifique imagens
+        em pelo menos 3 categorias. Cada exigência corresponde a um arquivo do projeto.
+      </p>
+
+      <ol class="requisitos">
+        <li>
+          <span class="marca">✓</span>
+          <div>
+            <strong>Base de imagens com 3 categorias</strong>
+            <span class="como">600 fotos reais de bife, pizza e sushi, do dataset público Food-101 — <code>etapa1_obter_dataset.py</code></span>
+          </div>
+        </li>
+        <li>
+          <span class="marca">✓</span>
+          <div>
+            <strong>Protocolo experimental: treino, validação e teste</strong>
+            <span class="como">Divisão estratificada 70% / 15% / 15% com semente fixa — <code>etapa2_dividir_dataset.py</code></span>
+          </div>
+        </li>
+        <li>
+          <span class="marca">✓</span>
+          <div>
+            <strong>Modelo de visão computacional que classifica o problema</strong>
+            <span class="como">Rede neural convolucional ResNet-18 com transfer learning — <code>etapa3_treinar_modelo.py</code></span>
+          </div>
+        </li>
+        <li>
+          <span class="marca">✓</span>
+          <div>
+            <strong>Matriz de confusão e principais métricas</strong>
+            <span class="como">Matriz de confusão, acurácia, precisão, revocação, especificidade e F1 — <code>etapa4_avaliar_modelo.py</code></span>
+          </div>
+        </li>
+        <li>
+          <span class="marca">✓</span>
+          <div>
+            <strong>Grupo de até 3 integrantes</strong>
+            <span class="como">Carlos Hobmeier, Amanda Queiroz e João Vitor de Freitas</span>
+          </div>
+        </li>
+        <li>
+          <span class="marca pendente">!</span>
+          <div>
+            <strong>Defesa de autoria</strong>
+            <span class="como">Conforme o cronograma do plano de ensino.</span>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       ETAPA 1 — BASE DE IMAGENS
+       ================================================================ -->
+  <section id="base">
+    <div class="rotulo"><span class="etapa-num">01</span> Base de imagens</div>
+    <h2>Seiscentas fotos de pratos de verdade</h2>
+    <div class="texto">
+      <p>
+        Usamos um subconjunto do <strong>Food-101</strong>, uma base pública com fotos de comida
+        tiradas por pessoas comuns em restaurantes e em casa. A iluminação, o ângulo e o fundo variam
+        bastante, o que deixa o problema mais próximo da vida real do que fotos de estúdio.
+      </p>
+      <p>
+        O arquivo original já vinha separado em treino e teste, mas juntamos todas as imagens em uma
+        pasta por classe para fazer a divisão com o nosso próprio protocolo (etapa 2).
+      </p>
+    </div>
+
+    <ul class="cardapio" aria-label="Quantidade de imagens por classe">
+      <li><span class="bolinha b-bife"></span>bife<span class="pontilhado"></span><span class="qtd">204</span></li>
+      <li><span class="bolinha b-pizza"></span>pizza<span class="pontilhado"></span><span class="qtd">200</span></li>
+      <li><span class="bolinha b-sushi"></span>sushi<span class="pontilhado"></span><span class="qtd">196</span></li>
+      <li class="total">total<span class="pontilhado"></span><span class="qtd">600</span></li>
+    </ul>
+
+    <figure class="moldura">
+      <img src="resultados/1_amostras_do_dataset.png" alt="Grade com cinco fotos de cada classe: bifes, pizzas e sushis em pratos variados" loading="lazy">
+      <figcaption>Cinco exemplos de cada classe. As classes estão praticamente balanceadas, então nenhuma delas domina o treino.</figcaption>
+    </figure>
+  </section>
+
+  <!-- ================================================================
+       ETAPA 2 — PROTOCOLO EXPERIMENTAL
+       ================================================================ -->
+  <section id="protocolo">
+    <div class="rotulo"><span class="etapa-num">02</span> Protocolo experimental</div>
+    <h2>Três conjuntos que nunca se misturam</h2>
+    <div class="texto">
+      <p>
+        As imagens foram divididas por <strong>holdout estratificado</strong>: cada foto vai para
+        exatamente um conjunto, e cada conjunto mantém a mesma proporção de bife, pizza e sushi da base completa.
+        A semente aleatória fixa (<code>SEMENTE = 42</code>) faz a divisão ser sempre a mesma, então qualquer
+        pessoa que rodar o código obtém os mesmos conjuntos.
+      </p>
+    </div>
+
+    <div class="barra-divisao" role="img" aria-label="Treino 70%, validação 15%, teste 15%">
+      <div style="flex: 70; background: var(--treino);"></div>
+      <div style="flex: 15; background: var(--validacao);"></div>
+      <div style="flex: 15; background: var(--teste);"></div>
+    </div>
+    <div class="legenda-divisao">
+      <div><span class="nome"><span class="bolinha" style="background: var(--treino)"></span>treino</span> <span class="detalhe">420 imagens · 70%</span></div>
+      <div><span class="nome"><span class="bolinha" style="background: var(--validacao)"></span>validação</span> <span class="detalhe">90 · 15%</span></div>
+      <div><span class="nome"><span class="bolinha" style="background: var(--teste)"></span>teste</span> <span class="detalhe">90 · 15%</span></div>
+    </div>
+
+    <div class="tres-cartoes">
+      <div class="cartao">
+        <h4><span class="chave" style="background: var(--treino)"></span>Treino</h4>
+        <p>As únicas imagens com que o modelo aprende. Os pesos são ajustados para errar menos nelas.</p>
+      </div>
+      <div class="cartao">
+        <h4><span class="chave" style="background: var(--validacao)"></span>Validação</h4>
+        <p>Avaliada a cada época para escolher a melhor versão do modelo e decidir quando parar o treino.</p>
+      </div>
+      <div class="cartao">
+        <h4><span class="chave" style="background: var(--teste)"></span>Teste</h4>
+        <p>Guardado até o final e usado uma única vez. Mostra como o modelo se sai com fotos inéditas.</p>
+      </div>
+    </div>
+
+    <div class="tabela-rolavel">
+      <table>
+        <caption class="sr-only" style="position:absolute;left:-9999px">Imagens por classe em cada conjunto</caption>
+        <thead>
+          <tr><th>conjunto</th><th>bife</th><th>pizza</th><th>sushi</th><th>total</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>treino</td><td>142</td><td>140</td><td>138</td><td>420</td></tr>
+          <tr><td>validação</td><td>31</td><td>30</td><td>29</td><td>90</td></tr>
+          <tr><td>teste</td><td>31</td><td>30</td><td>29</td><td>90</td></tr>
+        </tbody>
+        <tfoot>
+          <tr><td>total</td><td>204</td><td>200</td><td>196</td><td>600</td></tr>
+        </tfoot>
+      </table>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       ETAPA 3 — MODELO
+       ================================================================ -->
+  <section id="modelo">
+    <div class="rotulo"><span class="etapa-num">03</span> Modelo</div>
+    <h2>Reaproveitar o que uma rede já sabe</h2>
+    <div class="texto">
+      <p>
+        Treinar uma rede neural do zero com só 420 fotos faria o modelo <em>decorar</em> as imagens
+        em vez de aprender (overfitting). Por isso usamos <strong>transfer learning</strong>: partimos
+        da <strong>ResNet-18</strong>, uma rede convolucional já treinada em 1,2 milhão de imagens do
+        ImageNet, que já sabe reconhecer bordas, texturas e formas.
+      </p>
+      <p>
+        Congelamos todas as camadas dessa rede e trocamos apenas a última, que classificava 1000
+        categorias, por uma nova camada com 3 saídas. Só essa camada nova é treinada.
+      </p>
+    </div>
+
+    <div class="diagrama" aria-label="Diagrama do modelo">
+      <div class="bloco">
+        <span class="tipo">Entrada</span>
+        <span class="nome">Foto do prato</span>
+        <span class="info">redimensionada para 224 × 224 pixels</span>
+      </div>
+      <div class="seta" aria-hidden="true">→</div>
+      <div class="bloco congelado">
+        <span class="tipo">Congelado ❄</span>
+        <span class="nome">ResNet-18 pré-treinada no ImageNet</span>
+        <div class="camadas" aria-hidden="true">
+          <i style="--i:0"></i><i style="--i:1"></i><i style="--i:2"></i><i style="--i:3"></i><i style="--i:4"></i><i style="--i:5"></i><i style="--i:6"></i><i style="--i:7"></i>
+        </div>
+        <span class="info">camadas convolucionais que extraem bordas, texturas e formas<br><span class="numero">11.176.512</span> parâmetros que não mudam</span>
+      </div>
+      <div class="seta" aria-hidden="true">→</div>
+      <div class="bloco treinavel">
+        <span class="tipo">Treinado</span>
+        <span class="nome">Nova camada final</span>
+        <span class="info">512 características → 3 classes<br><span class="numero">1.539</span> parâmetros ajustados</span>
+      </div>
+      <div class="seta" aria-hidden="true">→</div>
+      <div class="saidas">
+        <span><span class="bolinha b-bife"></span>bife</span>
+        <span><span class="bolinha b-pizza"></span>pizza</span>
+        <span><span class="bolinha b-sushi"></span>sushi</span>
+      </div>
+    </div>
+
+    <p class="proporcao texto">
+      Ou seja: de 11,2 milhões de parâmetros, só <strong>0,014%</strong> foram treinados.
+      Por isso o treino leva menos de um minuto e funciona bem com poucas imagens.
+    </p>
+
+    <h3>Como o treino foi feito</h3>
+    <div class="tabela-rolavel texto">
+      <table class="chave-valor">
+        <tbody>
+          <tr><td>Função de perda</td><td>entropia cruzada</td></tr>
+          <tr><td>Otimizador</td><td>Adam, taxa de aprendizado 0,001</td></tr>
+          <tr><td>Tamanho do lote</td><td>32 imagens</td></tr>
+          <tr><td>Épocas</td><td>até 25, com parada antecipada após 4 sem melhora</td></tr>
+          <tr><td>Aumento de dados (só no treino)</td><td>recorte aleatório e espelhamento horizontal</td></tr>
+          <tr><td>Modelo escolhido</td><td>a época com menor perda na validação</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>Evolução do treinamento</h3>
+    <div class="texto">
+      <p>
+        A cada época o modelo passa por todas as fotos de treino e depois é avaliado na validação.
+        A melhor versão apareceu na <strong>época 20</strong>; nas quatro seguintes a validação não melhorou,
+        e o treino parou sozinho na época 24.
+      </p>
+    </div>
+
+    <div class="legenda-grafico" aria-hidden="true">
+      <span><i style="background: var(--treino)"></i>treino</span>
+      <span><i style="background: var(--validacao)"></i>validação</span>
+      <span><b class="marcador"></b>modelo salvo (época 20)</span>
+    </div>
+    <div class="graficos">
+      <div class="grafico" id="grafico-perda">
+        <h4>Perda</h4>
+        <div class="sub">quanto menor, melhor</div>
+      </div>
+      <div class="grafico" id="grafico-acuracia">
+        <h4>Acurácia</h4>
+        <div class="sub">quanto maior, melhor</div>
+      </div>
+    </div>
+
+    <div class="texto">
+      <p style="margin-top: 1.5rem">
+        As curvas de treino e validação andam juntas do início ao fim. Se o modelo estivesse decorando
+        as fotos de treino, a perda de treino continuaria caindo enquanto a de validação subiria — isso
+        não aconteceu, então <strong>não houve overfitting</strong>.
+      </p>
+    </div>
+
+    <details>
+      <summary>Ver os valores de todas as épocas</summary>
+      <div class="tabela-rolavel">
+        <table id="tabela-epocas">
+          <thead>
+            <tr><th>época</th><th>perda treino</th><th>perda validação</th><th>acurácia treino</th><th>acurácia validação</th></tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+    </details>
+  </section>
+
+  <!-- ================================================================
+       ETAPA 4 — RESULTADOS
+       ================================================================ -->
+  <section id="resultados">
+    <div class="rotulo"><span class="etapa-num">04</span> Avaliação no teste</div>
+    <h2>84 acertos em 90 fotos inéditas</h2>
+    <div class="texto">
+      <p>
+        O modelo salvo foi avaliado uma única vez no conjunto de teste. Nenhuma dessas 90 fotos foi
+        usada no treino nem na escolha do modelo, então este é o resultado que esperaríamos com fotos novas.
+      </p>
+    </div>
+
+    <div class="resultado-grid">
+      <div class="matriz-wrap">
+        <h3 style="margin-top: 0">Matriz de confusão</h3>
+        <div class="matriz" id="matriz">
+          <div></div><div></div><div class="eixo-x">classe prevista</div>
+
+          <div></div><div></div>
+          <div class="cab col"><span class="bolinha b-bife"></span>bife</div>
+          <div class="cab col"><span class="bolinha b-pizza"></span>pizza</div>
+          <div class="cab col"><span class="bolinha b-sushi"></span>sushi</div>
+
+          <div class="eixo-y">classe real</div>
+          <div class="cab lin"><span class="bolinha b-bife"></span>bife</div>
+          <div class="celula escura" tabindex="0" style="--t: 0.97" data-real="bife" data-previsto="bife" data-n="29" data-total="31"><span class="n">29</span><span class="pct">93,5%</span></div>
+          <div class="celula" tabindex="0" style="--t: 0.18" data-real="bife" data-previsto="pizza" data-n="1" data-total="31"><span class="n">1</span><span class="pct">3,2%</span></div>
+          <div class="celula" tabindex="0" style="--t: 0.18" data-real="bife" data-previsto="sushi" data-n="1" data-total="31"><span class="n">1</span><span class="pct">3,2%</span></div>
+
+          <div class="cab lin"><span class="bolinha b-pizza"></span>pizza</div>
+          <div class="celula" tabindex="0" style="--t: 0.18" data-real="pizza" data-previsto="bife" data-n="1" data-total="30"><span class="n">1</span><span class="pct">3,3%</span></div>
+          <div class="celula escura" tabindex="0" style="--t: 0.95" data-real="pizza" data-previsto="pizza" data-n="27" data-total="30"><span class="n">27</span><span class="pct">90,0%</span></div>
+          <div class="celula" tabindex="0" style="--t: 0.26" data-real="pizza" data-previsto="sushi" data-n="2" data-total="30"><span class="n">2</span><span class="pct">6,7%</span></div>
+
+          <div class="cab lin"><span class="bolinha b-sushi"></span>sushi</div>
+          <div class="celula" tabindex="0" style="--t: 0.19" data-real="sushi" data-previsto="bife" data-n="1" data-total="29"><span class="n">1</span><span class="pct">3,4%</span></div>
+          <div class="celula" tabindex="0" style="--t: 0" data-real="sushi" data-previsto="pizza" data-n="0" data-total="29"><span class="n">0</span><span class="pct">0%</span></div>
+          <div class="celula escura" tabindex="0" style="--t: 0.98" data-real="sushi" data-previsto="sushi" data-n="28" data-total="29"><span class="n">28</span><span class="pct">96,6%</span></div>
+        </div>
+        <p class="como-ler">
+          Cada linha é a classe verdadeira e cada coluna é o que o modelo respondeu.
+          A diagonal escura são os acertos; o resto são os erros. A porcentagem é em relação ao total da linha.
+        </p>
+        <div class="dica" id="dica-matriz" role="status"></div>
+      </div>
+
+      <div>
+        <h3 style="margin-top: 0">Métricas por classe</h3>
+        <div class="tabela-rolavel">
+          <table>
+            <thead>
+              <tr><th>classe</th><th>precisão</th><th>revocação</th><th>especif.</th><th>F1</th></tr>
+            </thead>
+            <tbody>
+              <tr><td><span class="classe"><span class="bolinha b-bife"></span>bife</span></td><td>0,935</td><td>0,935</td><td>0,966</td><td>0,935</td></tr>
+              <tr><td><span class="classe"><span class="bolinha b-pizza"></span>pizza</span></td><td>0,964</td><td>0,900</td><td>0,983</td><td>0,931</td></tr>
+              <tr><td><span class="classe"><span class="bolinha b-sushi"></span>sushi</span></td><td>0,903</td><td>0,966</td><td>0,951</td><td>0,933</td></tr>
+            </tbody>
+            <tfoot>
+              <tr><td>média macro</td><td>0,934</td><td>0,934</td><td>0,967</td><td>0,933</td></tr>
+            </tfoot>
+          </table>
+        </div>
+        <p style="font-size: 0.95rem; color: var(--tinta-2)">
+          <strong style="color: var(--tinta)">Acurácia: 93,3%</strong> (84 de 90).
+          As três classes ficaram com F1 entre 0,931 e 0,935, ou seja, o modelo não favorece nenhuma delas.
+        </p>
+      </div>
+    </div>
+
+    <h3>O que cada métrica responde</h3>
+    <p class="texto">Usando a pizza como exemplo:</p>
+    <div class="formulas">
+      <div class="formula">
+        <h4>Precisão</h4>
+        <code>VP / (VP + FP)</code>
+        <p>Quando o modelo diz “pizza”, com que frequência acerta? Pizza: 27 de 28 = 0,964.</p>
+      </div>
+      <div class="formula">
+        <h4>Revocação (sensibilidade)</h4>
+        <code>VP / (VP + FN)</code>
+        <p>De todas as pizzas, quantas o modelo encontrou? Pizza: 27 de 30 = 0,900.</p>
+      </div>
+      <div class="formula">
+        <h4>Especificidade</h4>
+        <code>VN / (VN + FP)</code>
+        <p>Do que não é pizza, quanto o modelo corretamente não chamou de pizza? 59 de 60 = 0,983.</p>
+      </div>
+      <div class="formula">
+        <h4>F1-score</h4>
+        <code>2 · P · R / (P + R)</code>
+        <p>Média harmônica de precisão e revocação: só é alta quando as duas são altas.</p>
+      </div>
+      <div class="formula">
+        <h4>Acurácia</h4>
+        <code>acertos / total</code>
+        <p>Percentual geral de acertos, somando todas as classes: 84 de 90.</p>
+      </div>
+    </div>
+    <p class="siglas texto">
+      <strong>VP</strong> verdadeiros positivos · <strong>FP</strong> falsos positivos ·
+      <strong>FN</strong> falsos negativos · <strong>VN</strong> verdadeiros negativos.
+      A <em>média macro</em> é a média simples das três classes, em que todas pesam igual.
+    </p>
+
+    <h3>Onde o modelo errou</h3>
+    <figure class="moldura">
+      <img src="resultados/4_erros_de_classificacao.png" alt="As seis fotos de teste classificadas errado, cada uma com a classe real e a prevista" loading="lazy">
+      <figcaption>As 6 fotos de teste classificadas errado, com a classe real e a que o modelo respondeu.</figcaption>
+    </figure>
+    <div class="texto">
+      <p>
+        Os erros se concentram em fotos <strong>escuras</strong> (o bife à luz de velas), com
+        <strong>vários alimentos no prato</strong> (o bife cercado de batatas e tomate) ou com
+        <strong>enquadramento incomum</strong> (pizzas muito de perto ou várias pizzas sobre caixas).
+        São casos difíceis até para uma pessoa olhando rapidamente.
+      </p>
+    </div>
+  </section>
+
+  <!-- ================================================================
+       CONCLUSÃO
+       ================================================================ -->
+  <section id="conclusao">
+    <div class="rotulo"><span class="etapa-num">05</span> Conclusão</div>
+    <h2>O que aprendemos</h2>
+    <ol class="conclusoes texto">
+      <li><strong>O modelo funciona:</strong> 93,3% de acurácia em fotos inéditas, com desempenho equilibrado entre as três classes.</li>
+      <li><strong>Transfer learning compensa a base pequena:</strong> treinando só 1.539 parâmetros, 420 fotos foram suficientes.</li>
+      <li><strong>O protocolo evita resultados inflados:</strong> o teste ficou isolado até o fim, e a validação controlou a parada do treino sem overfitting.</li>
+      <li><strong>Limitação:</strong> com 90 imagens de teste, cada erro muda a acurácia em 1,1 ponto percentual. Uma base maior daria uma estimativa mais precisa.</li>
+      <li><strong>Próximos passos possíveis:</strong> descongelar o último bloco da ResNet para ajuste fino, coletar mais imagens ou usar validação cruzada.</li>
+    </ol>
+  </section>
+
+  <!-- ================================================================
+       COMO REPRODUZIR
+       ================================================================ -->
+  <section id="reproduzir">
+    <div class="rotulo"><span class="etapa-num">06</span> Como reproduzir</div>
+    <h2>Rodando o projeto</h2>
+    <div class="texto">
+      <p>Com Python 3.10 ou mais recente, dentro da pasta do projeto:</p>
+    </div>
+<pre><span class="comentario"># cria e ativa um ambiente virtual</span>
+python3 -m venv .venv
+source .venv/bin/activate
+
+<span class="comentario"># instala as bibliotecas</span>
+pip install -r requirements.txt
+
+<span class="comentario"># roda as 4 etapas (cerca de 1 minuto)</span>
+python3 executar_tudo.py</pre>
+
+    <div class="texto">
+      <p>Os gráficos e métricas são gerados na pasta <code>resultados/</code>. Os parâmetros ficam em <code>config.py</code>.</p>
+    </div>
+
+<pre class="arvore">pjbl2/
+├── config.py                  <span class="comentario">← todos os parâmetros ajustáveis</span>
+├── etapa1_obter_dataset.py    <span class="comentario">← 1. baixa e organiza a base</span>
+├── etapa2_dividir_dataset.py  <span class="comentario">← 2. divide em treino / validação / teste</span>
+├── etapa3_treinar_modelo.py   <span class="comentario">← 3. treina a ResNet-18</span>
+├── etapa4_avaliar_modelo.py   <span class="comentario">← 4. matriz de confusão e métricas</span>
+├── executar_tudo.py           <span class="comentario">← roda as 4 etapas em ordem</span>
+├── utils/                     <span class="comentario">← leitura de dados, modelo e gráficos</span>
+└── resultados/                <span class="comentario">← figuras, métricas e modelo treinado</span></pre>
+  </section>
+
+  <footer>
+    <span>PjBL2 · Sistemas de Informação Inteligentes · PUCPR</span>
+    <span>Resultados da execução com SEMENTE = 42</span>
+  </footer>
+</main>
+
+<script>
+  // ------------------------------------------------------------------
+  // Dados do treinamento (resultados/historico_treinamento.json)
+  // ------------------------------------------------------------------
+  const historico = {
+    perda: {
+      treino:    [1.009, 0.715, 0.590, 0.504, 0.454, 0.425, 0.405, 0.357, 0.322, 0.329, 0.331, 0.328, 0.298, 0.285, 0.264, 0.238, 0.237, 0.236, 0.278, 0.224, 0.241, 0.211, 0.229, 0.240],
+      validacao: [0.762, 0.591, 0.514, 0.473, 0.426, 0.378, 0.364, 0.331, 0.326, 0.317, 0.305, 0.297, 0.283, 0.288, 0.276, 0.271, 0.275, 0.269, 0.267, 0.256, 0.261, 0.259, 0.258, 0.257],
+    },
+    acuracia: {
+      treino:    [0.474, 0.805, 0.819, 0.871, 0.867, 0.869, 0.874, 0.895, 0.914, 0.917, 0.907, 0.898, 0.893, 0.919, 0.914, 0.945, 0.945, 0.917, 0.931, 0.936, 0.924, 0.955, 0.926, 0.931],
+      validacao: [0.700, 0.822, 0.833, 0.856, 0.856, 0.900, 0.878, 0.878, 0.878, 0.900, 0.889, 0.900, 0.900, 0.933, 0.900, 0.911, 0.900, 0.922, 0.900, 0.922, 0.911, 0.922, 0.922, 0.900],
+    },
+  };
+  const EPOCA_DO_MELHOR_MODELO = 20;
+
+  const SERIES = [
+    { chave: "treino", nome: "treino", cor: "#3B6FC4" },
+    { chave: "validacao", nome: "validação", cor: "#C2417A" },
+  ];
+
+  const formatarDecimal = (v, casas = 3) => v.toFixed(casas).replace(".", ",");
+  const formatarPercentual = (v) => (v * 100).toFixed(1).replace(".", ",") + "%";
+
+  const SVG_NS = "http://www.w3.org/2000/svg";
+  function criarSvg(tag, atributos) {
+    const el = document.createElementNS(SVG_NS, tag);
+    for (const [k, v] of Object.entries(atributos)) el.setAttribute(k, v);
+    return el;
+  }
+
+  // ------------------------------------------------------------------
+  // Gráfico de linhas com cursor (crosshair) e dica
+  // ------------------------------------------------------------------
+  function desenharGrafico(idContainer, dados, { minY, maxY, ticks, formatarTick, formatarValor }) {
+    const container = document.getElementById(idContainer);
+    const L = 520, A = 260;
+    const margem = { topo: 18, direita: 12, base: 30, esquerda: 40 };
+    const nEpocas = dados.treino.length;
+
+    const x = (epoca) => margem.esquerda + ((epoca - 1) / (nEpocas - 1)) * (L - margem.esquerda - margem.direita);
+    const y = (v) => A - margem.base - ((v - minY) / (maxY - minY)) * (A - margem.topo - margem.base);
+
+    const svg = criarSvg("svg", { viewBox: `0 0 ${L} ${A}`, tabindex: "0", role: "img" });
+    svg.setAttribute("aria-label", `${container.querySelector("h4").textContent} por época, treino e validação. Use as setas para navegar.`);
+
+    // linhas de grade e rótulos do eixo Y
+    for (const t of ticks) {
+      svg.append(criarSvg("line", { x1: margem.esquerda, x2: L - margem.direita, y1: y(t), y2: y(t), stroke: "#E4DCCD", "stroke-width": 1 }));
+      const rotulo = criarSvg("text", { x: margem.esquerda - 8, y: y(t) + 4, "text-anchor": "end" });
+      rotulo.textContent = formatarTick(t);
+      svg.append(rotulo);
+    }
+
+    // rótulos do eixo X
+    for (const epoca of [1, 5, 10, 15, 20, nEpocas]) {
+      const rotulo = criarSvg("text", { x: x(epoca), y: A - 8, "text-anchor": "middle" });
+      rotulo.textContent = epoca === 1 ? "época 1" : epoca;
+      svg.append(rotulo);
+    }
+
+    // linhas das séries
+    for (const serie of SERIES) {
+      const pontos = dados[serie.chave].map((v, i) => `${i === 0 ? "M" : "L"}${x(i + 1).toFixed(1)},${y(v).toFixed(1)}`).join("");
+      svg.append(criarSvg("path", { d: pontos, fill: "none", stroke: serie.cor, "stroke-width": 2, "stroke-linejoin": "round", "stroke-linecap": "round" }));
+    }
+
+    // marcador do melhor modelo
+    const vMelhor = dados.validacao[EPOCA_DO_MELHOR_MODELO - 1];
+    svg.append(criarSvg("circle", { cx: x(EPOCA_DO_MELHOR_MODELO), cy: y(vMelhor), r: 5, fill: "#1F1B16", stroke: "#FBF8F2", "stroke-width": 2 }));
+
+    // camada interativa
+    const cursor = criarSvg("line", { y1: margem.topo, y2: A - margem.base, stroke: "#1F1B16", "stroke-opacity": 0.35, "stroke-width": 1, visibility: "hidden" });
+    const pontosCursor = SERIES.map((s) => criarSvg("circle", { r: 4.5, fill: s.cor, stroke: "#FBF8F2", "stroke-width": 2, visibility: "hidden" }));
+    const area = criarSvg("rect", { x: margem.esquerda - 10, y: 0, width: L - margem.esquerda - margem.direita + 20, height: A, fill: "transparent" });
+    svg.append(cursor, ...pontosCursor, area);
+    container.append(svg);
+
+    const dica = document.createElement("div");
+    dica.className = "dica";
+    dica.setAttribute("aria-hidden", "true");
+    container.append(dica);
+
+    let epocaAtual = null;
+
+    function mostrar(epoca) {
+      epocaAtual = epoca;
+      const cx = x(epoca);
+      cursor.setAttribute("x1", cx);
+      cursor.setAttribute("x2", cx);
+      cursor.setAttribute("visibility", "visible");
+      SERIES.forEach((s, i) => {
+        pontosCursor[i].setAttribute("cx", cx);
+        pontosCursor[i].setAttribute("cy", y(dados[s.chave][epoca - 1]));
+        pontosCursor[i].setAttribute("visibility", "visible");
+      });
+
+      dica.replaceChildren();
+      const titulo = document.createElement("div");
+      titulo.className = "titulo-dica";
+      titulo.textContent = `Época ${epoca}${epoca === EPOCA_DO_MELHOR_MODELO ? " · modelo salvo" : ""}`;
+      dica.append(titulo);
+      for (const s of SERIES) {
+        const linha = document.createElement("div");
+        linha.className = "linha-dica";
+        const chave = document.createElement("i");
+        chave.style.background = s.cor;
+        const valor = document.createElement("b");
+        valor.textContent = formatarValor(dados[s.chave][epoca - 1]);
+        const nome = document.createElement("span");
+        nome.textContent = s.nome;
+        linha.append(chave, valor, nome);
+        dica.append(linha);
+      }
+
+      // posiciona a dica ao lado do cursor, sem sair do gráfico
+      const caixaSvg = svg.getBoundingClientRect();
+      const escala = caixaSvg.width / L;
+      const topoSvg = caixaSvg.top - container.getBoundingClientRect().top;
+      let esquerda = cx * escala + 14;
+      if (esquerda + dica.offsetWidth > container.clientWidth) esquerda = cx * escala - dica.offsetWidth - 14;
+      dica.style.left = `${Math.max(0, esquerda)}px`;
+      dica.style.top = `${topoSvg + margem.topo * escala}px`;
+      dica.classList.add("visivel");
+    }
+
+    function esconder() {
+      epocaAtual = null;
+      cursor.setAttribute("visibility", "hidden");
+      pontosCursor.forEach((p) => p.setAttribute("visibility", "hidden"));
+      dica.classList.remove("visivel");
+    }
+
+    svg.addEventListener("pointermove", (evento) => {
+      const caixa = svg.getBoundingClientRect();
+      const xSvg = ((evento.clientX - caixa.left) / caixa.width) * L;
+      const epoca = Math.round(((xSvg - margem.esquerda) / (L - margem.esquerda - margem.direita)) * (nEpocas - 1)) + 1;
+      mostrar(Math.min(nEpocas, Math.max(1, epoca)));
+    });
+    svg.addEventListener("pointerleave", esconder);
+    svg.addEventListener("focus", () => mostrar(EPOCA_DO_MELHOR_MODELO));
+    svg.addEventListener("blur", esconder);
+    svg.addEventListener("keydown", (evento) => {
+      if (evento.key !== "ArrowLeft" && evento.key !== "ArrowRight") return;
+      evento.preventDefault();
+      const passo = evento.key === "ArrowRight" ? 1 : -1;
+      mostrar(Math.min(nEpocas, Math.max(1, (epocaAtual ?? EPOCA_DO_MELHOR_MODELO) + passo)));
+    });
+  }
+
+  desenharGrafico("grafico-perda", historico.perda, {
+    minY: 0, maxY: 1.1, ticks: [0, 0.25, 0.5, 0.75, 1],
+    formatarTick: (t) => formatarDecimal(t, 2),
+    formatarValor: (v) => formatarDecimal(v),
+  });
+
+  desenharGrafico("grafico-acuracia", historico.acuracia, {
+    minY: 0.4, maxY: 1, ticks: [0.4, 0.6, 0.8, 1],
+    formatarTick: (t) => Math.round(t * 100) + "%",
+    formatarValor: formatarPercentual,
+  });
+
+  // ------------------------------------------------------------------
+  // Tabela com todas as épocas
+  // ------------------------------------------------------------------
+  const corpoTabela = document.querySelector("#tabela-epocas tbody");
+  historico.perda.treino.forEach((_, i) => {
+    const linha = document.createElement("tr");
+    const valores = [
+      String(i + 1) + (i + 1 === EPOCA_DO_MELHOR_MODELO ? " ★" : ""),
+      formatarDecimal(historico.perda.treino[i]),
+      formatarDecimal(historico.perda.validacao[i]),
+      formatarPercentual(historico.acuracia.treino[i]),
+      formatarPercentual(historico.acuracia.validacao[i]),
+    ];
+    for (const v of valores) {
+      const celula = document.createElement("td");
+      celula.textContent = v;
+      linha.append(celula);
+    }
+    corpoTabela.append(linha);
+  });
+
+  // ------------------------------------------------------------------
+  // Dica da matriz de confusão
+  // ------------------------------------------------------------------
+  const matrizWrap = document.querySelector(".matriz-wrap");
+  const dicaMatriz = document.getElementById("dica-matriz");
+
+  function mostrarDicaMatriz(celula) {
+    const { real, previsto, n, total } = celula.dataset;
+    const pct = ((Number(n) / Number(total)) * 100).toFixed(1).replace(".", ",");
+    const quantidade = Number(n);
+    const feminino = real === "pizza";
+    const plural = { bife: "bifes", pizza: "pizzas", sushi: "sushis" }[real];
+    const sufixo = (feminino ? "a" : "o") + (quantidade === 1 ? "" : "s"); // classificad-o / -a / -os / -as
+
+    dicaMatriz.replaceChildren();
+    const titulo = document.createElement("div");
+    titulo.className = "titulo-dica";
+    titulo.textContent = real === previsto ? "acertos" : "erros";
+    const texto = document.createElement("div");
+    texto.textContent = real === previsto
+      ? `${n} de ${total} ${plural} reconhecid${sufixo} corretamente (${pct}%)`
+      : `${n} ${quantidade === 1 ? real : plural} ${quantidade === 1 ? "foi" : "foram"} classificad${sufixo} como ${previsto} (${pct}% d${feminino ? "as" : "os"} ${plural})`;
+    dicaMatriz.append(titulo, texto);
+
+    // posiciona a dica centralizada logo acima da célula, sem sair da área da matriz
+    dicaMatriz.style.maxWidth = "220px";
+    const caixaWrap = matrizWrap.getBoundingClientRect();
+    const caixa = celula.getBoundingClientRect();
+    const larguraDica = dicaMatriz.offsetWidth;
+    const centro = caixa.left - caixaWrap.left + caixa.width / 2;
+    const esquerda = Math.min(Math.max(0, centro - larguraDica / 2), matrizWrap.clientWidth - larguraDica);
+    dicaMatriz.style.left = `${esquerda}px`;
+    dicaMatriz.style.top = `${caixa.top - caixaWrap.top - dicaMatriz.offsetHeight - 8}px`;
+    dicaMatriz.classList.add("visivel");
+  }
+
+  for (const celula of document.querySelectorAll(".celula")) {
+    celula.addEventListener("pointerenter", () => mostrarDicaMatriz(celula));
+    celula.addEventListener("focus", () => mostrarDicaMatriz(celula));
+    celula.addEventListener("pointerleave", () => dicaMatriz.classList.remove("visivel"));
+    celula.addEventListener("blur", () => dicaMatriz.classList.remove("visivel"));
+  }
+</script>
+</body>
+</html>
